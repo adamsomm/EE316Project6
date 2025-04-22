@@ -80,10 +80,20 @@ bool ResetFlag = 0;
 
 u8 Channel;
 u16 RawData;
-u32 USPeriod = 3000000;        // 60ms in microseconds
-u32 USHighTime = 500;         // 10us high time
+u32 USPeriod = 20000000;
+u32 USHighTime = 15000;
+
+//u32 USPeriod = 3000000;        // 60ms in microseconds
+//u32 USHighTime = 500;         // 10us high time
 
 int main() {
+
+	// TODO:
+	// add LCD Display changes
+	// add SERVO and PMOD LED to adc mode 1
+	// add RGB LED for estop, softstop, and go mode
+	// add logic for displaying distance on lcd, only take new data every __ seconds so it isnt hard to read
+
 	int DCDutyCycle;
 	int State = 0;
 	int Status;
@@ -161,6 +171,8 @@ int main() {
 				printf("ESTOP \r\n");
 				Xil_Out32(TMR3Address + 4, BzPeriod3);
 				Xil_Out32(TMR3Address + 16 + 4, BzPeriod3 / 2);
+				Xil_Out32(TMR2Address + 16 + 4, 0);// turn off motor
+				// ADD servo stop
 			} else {
 				if (distance < 15) {
 					printf("softstop \r\n");
